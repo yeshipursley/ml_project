@@ -3,6 +3,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import train_test_split
 from typing import Tuple
+from sklearn import preprocessing
 
 def load_data(path: str) -> pd.DataFrame:
     """
@@ -50,6 +51,8 @@ def split_data(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series,
     Output: 
         - Tuple containing training features, validation features, training labels, and validation labels.
     """
+    le = preprocessing.LabelEncoder()
+    df['Class'] = le.fit_transform(df['Class'])
     X = df.drop(columns=['Class'])
     y = df['Class']
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
